@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   // Train Service Alert
   try {
     let resp = await axios.get(
-      `http://datamall2.mytransport.sg/ltaodataservice/TrainServiceAlerts`,
+      `https://datamall2.mytransport.sg/ltaodataservice/TrainServiceAlerts`,
       {
         headers: {
           AccountKey: process.env.ACCKEY,
