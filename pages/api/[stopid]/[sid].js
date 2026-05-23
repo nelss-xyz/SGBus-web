@@ -18,6 +18,7 @@ export default async function handler(req, res) {
       }
     );
     let srt = resp.data;
+
     srt.Services.sort((a, b) => {
       if (isNumeric(a.ServiceNo)) {
         return a.ServiceNo - b.ServiceNo;
@@ -26,8 +27,10 @@ export default async function handler(req, res) {
       }
     });
     res.setHeader("Cache-Control", "s-maxage=30");
-    res.status(200).json(srt); 
+    res.status(200).json(srt);
   } catch (e) {
-    res.status(500).json(e);
+    res.setHeader('Content-Type', 'text/plain');
+    res.status(500).end("Failed to fetch data. Something went wrong.");
+
   }
 }
