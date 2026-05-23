@@ -14,14 +14,18 @@ export const getSystemPrompt = () => {
 
 TODAY'S DATE IS: ${currentDateString}
 
-Analyze the data and untangle it. Generate a separate alert object for EACH distinct issue. Output a JSON object containing an array called "alerts". 
+Analyze the data and untangle it. Generate alert objects based on these rules:
+1. Generate a separate alert object for EACH distinct, unrelated issue. 
+2. MERGING RULE: If a message describes a root cause (e.g., an accident, heavy traffic, roadwork) AND its resulting impact on transit (e.g., specific bus delays or diversions), you MUST combine them into a SINGLE alert object. Do not split cause and effect.
+
+Output a JSON object containing an array called "alerts". 
 
 Each object in the "alerts" array must have:
-* "affectedLine": The 3-letter train line code (e.g., NSL, EWL). If the alert is about buses or general traffic, output "N/A".
+* "affectedLine": The 3-letter train or LRT line code (e.g., NSL, EWL, CCL, DTL, TEL, NEL, SKL, PTL). If the alert is strictly about buses or general traffic, output "N/A".
 * "alertCategory": "disruption", "maintenance", or "non-train".
-* "severity": "high" or "low".
-* "header": An action-oriented, highly useful status update (4-8 words). Write it as a natural sentence or news ticker containing a verb, NOT a formal title. Do NOT use Title Case. 
-* "content": A polished, readable summary of what happened. Incorporate relevant alternative transport info.
+* "severity": "high" or "low". STRICT SEVERITY RULE: Classify unexpected breakdowns, accidents, or immediate major delays as "high". Classify planned maintenance, future service adjustments, or minor traffic as "low".
+* "header": An action-oriented, highly useful status update (4-8 words). Contain a verb. Use Sentence case (capitalize ONLY the first word and proper nouns like TPE or NSL). (e.g., "Accident on TPE delays multiple buses").
+* "content": A polished, readable summary of what happened. Extract all crucial details (locations, times) and thoroughly detail all alternative transport options or affected bus numbers. 
 
 STRICT TENSE RULE: Compare the dates mentioned in the raw message against TODAY'S DATE. 
 * If the event is currently happening today, use PRESENT TENSE (e.g., "is closed", "are adjusted").
