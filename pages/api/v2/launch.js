@@ -159,18 +159,33 @@ async function fetchLastUpdated() {
   }
 }
 
+/** Fetches the latest commit date from the SGTransitData repo. Returns null on failure. */
+async function fetchLastUpdatedTransitData() {
+  try {
+    const resp = await axios.get(
+      "https://api.github.com/repos/nelss-xyz/SGTransitData/commits"
+    );
+    return resp.data[0].commit.committer.date;
+  } catch (err) {
+    console.error("[Github API Error] Failed to fetch last updated date:", err.message);
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   try {
-    const [trainAlerts, customAlerts, lastUpdated] = await Promise.all([
+    const [trainAlerts, customAlerts, lastUpdated, lastUpdatedTransitData] = await Promise.all([
       fetchTrainAlerts(),
       fetchCustomAlerts(),
       fetchLastUpdated(),
+      fetchLastUpdatedTransitData()
     ]);
 
     res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=600");
     res.status(200).json({
       alerts: [...trainAlerts, ...customAlerts],
       lastUpdated,
+      lastUpdatedTransitData,
     });
   } catch (err) {
     console.error("[Launch API Fatal Error]:", err.message);
