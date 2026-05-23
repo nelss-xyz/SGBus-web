@@ -2,7 +2,7 @@ import fetch from "cross-fetch";
 
 export default async function handler(req, res) {
     //   try {
-    await fetch(`https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData@latest/Data/Output/mrt/mrt.json`)
+    await fetch(`https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData/Data/Output/mrt/mrt.json`)
         .then(x => x.json())
         .then((resp) => {
             res.setHeader("Cache-Control", "s-maxage=259200");
