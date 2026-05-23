@@ -13,7 +13,7 @@ export default async function handler(req, res) {
                 },
             }
         );
-        res.setHeader("Cache-Control", "s-maxage=30");
+        res.setHeader("Cache-Control", "s-maxage=150");
         res.status(200).json(resp.data);
     } catch (e) {
 
