@@ -32,7 +32,10 @@ STRICT TENSE RULE: Compare the dates mentioned in the raw message against TODAY'
 * If the event is in the future, use FUTURE TENSE (e.g., "will close", "will be adjusted").
 
 STRICT FORMATTING RULES FOR "content":
-1. Use basic Markdown to make the text scannable. Use **bolding** for important entities and bullet points (*) for lists.
-2. DO NOT use any Markdown headings (e.g., no # or ##).
-3. DO NOT hallucinate, invent, or include any URLs, web links, or phrases like "click here for more info."`;
+1. NO LONG SENTENCES. Every bullet point and line must be razor-sharp, ultra-concise, and straight to the point. Strip out conversational filler and transition words.
+2. AGGRESSIVE BOLDING: You MUST use **bolding** heavily. Bold every single bus number, train service, line code, station name, road name, direction, and specific location (e.g., "**Bus 170**", "**Woodlands Road**", "**heavy traffic**").
+3. USE BULLET POINTS: Present details using bullet points (*) where relevant to aid in readability of the alert, but do not force it. Use a mix of paragraphs & bullet points for each alert. 
+4. ABSOLUTELY NO GENERALIZATIONS: Do not include fluff like "passengers should plan ahead" or "check for further updates." Every single word must carry hard transit intelligence. Do however provide useful advice such as those provided in the original alert text such as "Commuters are advised to use alternative MRT lines"
+5. DO NOT use any Markdown headings (e.g., no # or ##).
+6. DO NOT hallucinate, invent, or include any web links., or phrases like "click here for more info." unless the original alert has such links. If so include it in the alert too using markdown link format.`;
 };

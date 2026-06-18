@@ -1,13 +1,16 @@
 import axios from "axios";
 import crypto from "crypto";
 import { Redis } from "@upstash/redis";
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 import { getSystemPrompt } from "./../../../config/LTAAlertPrompt.js";
 
 const LTA_HEADERS = { headers: { AccountKey: process.env.ACCKEY } };
 
 const redis = Redis.fromEnv();
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new OpenAI({
+  apiKey: process.env.CEREBRAS_API_KEY,
+  baseURL: "https://api.cerebras.ai/v1",
+});
 
 /** Fetches train service alerts from LTA DataMall. */
 async function fetchTrainAlerts() {
@@ -49,24 +52,25 @@ async function fetchTrainAlerts() {
 
       // If parsedData is null, we had a cache miss
       if (!parsedData) {
-        const model = "gemini-2.5-flash";
+        const model = "zai-glm-4.7";
         console.log(`Cache miss! Processing with ${model}...`);
 
         const aiInput = `Raw Message: "${rawText}"\nAffected Segments: ${segmentsContext}`;
 
         try {
-          const response = await ai.models.generateContent({
+          const response = await ai.chat.completions.create({
             model: model,
-            contents: aiInput,
-            config: {
-              systemInstruction: getSystemPrompt(),
-              responseMimeType: "application/json",
-              temperature: 0.1,
-            }
+            messages: [
+              { role: "system", content: getSystemPrompt() },
+              { role: "user", content: aiInput }
+            ],
+            max_completion_tokens: 5000,
+            response_format: { type: "json_object" },
+            // temperature: 0.1,
           });
 
-          // Parse Gemini's JSON string immediately into a JS Object
-          parsedData = JSON.parse(response.text);
+          // Parse the JSON string immediately into a JS Object
+          parsedData = JSON.parse(response.choices[0].message.content);
 
           // 3. Safe Redis Set (Upstash automatically stringifies objects!)
           try {
