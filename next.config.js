@@ -8,6 +8,21 @@ const nextConfig = {
         destination: 'https://play.google.com/store/apps/details?id=com.slen.sgbus',
         statusCode: 301,
       },
+      {
+        source: '/api/v2/data/stops',
+        destination: 'https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData/Data/Output/bus/stops.json',
+        statusCode: 301,
+      },
+      {
+        source: '/api/v2/data/services',
+        destination: 'https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData/Data/Output/bus/services.json',
+        statusCode: 301,
+      },
+      {
+        source: '/api/v2/data/mrt',
+        destination: 'https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData/Data/Output/mrt/mrt.json',
+        statusCode: 301,
+      },
     ]
   },
 }
