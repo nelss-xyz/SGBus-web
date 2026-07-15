@@ -20,7 +20,7 @@ const nextConfig = {
       },
       {
         source: '/api/v2/data/mrt',
-        destination: 'https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData/Data/Output/mrt/mrt.json',
+        destination: 'https://raw.githubusercontent.com/nelss-xyz/SGTransitData/refs/heads/main/Data/Output/mrt/mrt.json',
         statusCode: 301,
       },
     ]
