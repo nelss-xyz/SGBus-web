@@ -52,7 +52,7 @@ async function fetchTrainAlerts() {
 
       // If parsedData is null, we had a cache miss
       if (!parsedData) {
-        const model = "zai-glm-4.7";
+        const model = "gemma-4-31b";
         console.log(`Cache miss! Processing with ${model}...`);
 
         const aiInput = `Raw Message: "${rawText}"\nAffected Segments: ${segmentsContext}`;
