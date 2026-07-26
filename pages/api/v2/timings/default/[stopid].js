@@ -189,10 +189,10 @@ export default async function handler(req, res) {
 
     const services = (ltaData && Array.isArray(ltaData.Services)) ? ltaData.Services : [];
 
-    if (services.length === 0) {
+    if (services.length === 0 && expectedBuses.length === 0) {
       needCMQuery = true;
     } else if (expectedBuses.length > 0) {
-      // Exclude buses with letters in their names (e.g. 34A, 10e, 68B) from threshold count
+      // Exclude buses with letters in their names (e.g. 34A, 10e, 68B, 991B) from threshold count
       const numericExpected = expectedBuses.filter((b) => /^\d+$/.test(String(b).trim()));
       const targetBuses = numericExpected.length > 0 ? numericExpected : expectedBuses;
 
@@ -206,19 +206,12 @@ export default async function handler(req, res) {
         }
       });
 
-      if (totalExpected < 4) {
-        // Less than 4 buses at stop: if LTA has timings for even 1 bus, ignore CM
-        if (busesWithTimingsCount === 0) {
-          needCMQuery = true;
-        }
-      } else {
-        // 4 or more buses at stop: if < 50% of purely numeric buses have timings (more than 50% missing), query CM
-        if (busesWithTimingsCount / totalExpected < 0.5) {
-          needCMQuery = true;
-        }
+      // If less than 50% of expected numeric buses have LTA timings (i.e. >= 50% missing), query CM
+      if (totalExpected > 0 && busesWithTimingsCount / totalExpected < 0.5) {
+        needCMQuery = true;
       }
     } else {
-      // Exclude buses with letters in their names (e.g. 34A, 10e, 68B) from threshold count
+      // Exclude buses with letters in their names from threshold count
       const numericServices = services.filter((s) => /^\d+$/.test(String(s.ServiceNo).trim()));
       const targetServices = numericServices.length > 0 ? numericServices : services;
 
@@ -230,14 +223,8 @@ export default async function handler(req, res) {
         }
       });
 
-      if (totalServices < 4) {
-        if (busesWithTimingsCount === 0) {
-          needCMQuery = true;
-        }
-      } else {
-        if (busesWithTimingsCount / totalServices < 0.5) {
-          needCMQuery = true;
-        }
+      if (totalServices === 0 || busesWithTimingsCount / totalServices < 0.5) {
+        needCMQuery = true;
       }
     }
   } catch (ltaErr) {
@@ -266,7 +253,7 @@ export default async function handler(req, res) {
     return res.status(200).json(ltaData);
   }
 
-  // Step 3: Otherwise (>= 50% purely numeric bus data missing or LTA failed), THEN query CM
+  // Step 3: Otherwise (>= 50% numeric bus data missing or LTA failed), THEN query CM
   const cmServices = (await fetchCMTimings(stopid, location)) || [];
 
   const ltaServices = (ltaData && Array.isArray(ltaData.Services)) ? ltaData.Services : [];
