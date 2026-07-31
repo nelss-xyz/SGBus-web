@@ -15,7 +15,7 @@ const nextConfig = {
       },
       {
         source: '/api/v2/data/services',
-        destination: 'https://raw.githubusercontent.com/nelss-xyz/SGTransitData/refs/heads/main/Data/Output/bus/services.json',
+        destination: 'https://cdn.jsdelivr.net/gh/nelss-xyz/SGTransitData/Data/Output/bus/services.json',
         statusCode: 301,
       },
       {
