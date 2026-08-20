@@ -74,13 +74,13 @@ async function fetchTrainAlerts() {
 
           // 3. Safe Redis Set (Upstash automatically stringifies objects!)
           try {
-            await redis.set(cacheKey, parsedData, { ex: 86400 });
+            await redis.set(cacheKey, parsedData, { ex: 259200 });
           } catch (redisSetErr) {
             console.error(`[Redis Set Error] Failed to save cache for ${cacheKey}:`, redisSetErr.message);
           }
 
         } catch (aiErr) {
-          console.error("[Gemini/Parse Error] Failed to process AI:", aiErr.message);
+          console.error("[AI/Parse Error] Failed to process AI:", aiErr.message);
           return [{
             header: "Transit Alert",
             message: rawText,
