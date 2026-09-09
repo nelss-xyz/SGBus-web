@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       twoHourForecast,
       twentyFourHourForecast,
       uv,
+      psi,
     ] = await Promise.all([
       fetchDataset(
         "https://api-open.data.gov.sg/v2/real-time/api/air-temperature"
@@ -39,6 +40,7 @@ export default async function handler(req, res) {
         "https://api-open.data.gov.sg/v2/real-time/api/twenty-four-hr-forecast"
       ),
       fetchDataset("https://api-open.data.gov.sg/v2/real-time/api/uv"),
+      fetchDataset("https://api-open.data.gov.sg/v2/real-time/api/psi"),
     ]);
 
     // Cache for 15 minutes (900 seconds) on Vercel Edge CDN
@@ -54,6 +56,8 @@ export default async function handler(req, res) {
       twoHourForecast,
       twentyFourHourForecast,
       uv,
+      psi,
+      warnings: [],
     });
   } catch (fatalErr) {
     console.error("[Weather API Fatal Error]:", fatalErr.message);
