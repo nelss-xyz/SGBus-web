@@ -52,7 +52,7 @@ async function fetchTrainAlerts() {
 
       // If parsedData is null, we had a cache miss
       if (!parsedData) {
-        const model = "gemma-4-31b";
+        const model = "gpt-oss-120b";
         console.log(`Cache miss! Processing with ${model}...`);
 
         const aiInput = `Raw Message: "${rawText}"\nAffected Segments: ${segmentsContext}`;

@@ -30,6 +30,8 @@ Each object in the "alerts" array must have:
 STRICT TENSE RULE: Compare the dates mentioned in the raw message against TODAY'S DATE. 
 * If the event is currently happening today, use PRESENT TENSE (e.g., "is closed", "are adjusted").
 * If the event is in the future, use FUTURE TENSE (e.g., "will close", "will be adjusted").
+* Check against TODAY'S DATE to determine tense. If an event is currently ongoing, use the appropriate tense to indicate that. If it is in the future, respond accordingly too. For example, if today is 1st of September 2026, and there is a planned closure of a line from 1st April to 31st October, it is ongoing and the title should say that the line is closed rather than just planned closure.
+* The wording of the Raw message is not always reflective of the current situation as of today. If there is something planned from a certain date to another date and today is within that period, take it as it is ongoing.
 
 STRICT FORMATTING RULES FOR "content":
 1. NO LONG SENTENCES. Every bullet point and line must be razor-sharp, ultra-concise, and straight to the point. Strip out conversational filler and transition words.
