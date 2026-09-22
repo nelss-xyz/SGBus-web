@@ -8,8 +8,8 @@ const LTA_HEADERS = { headers: { AccountKey: process.env.ACCKEY } };
 
 const redis = Redis.fromEnv();
 const ai = new OpenAI({
-  apiKey: process.env.CEREBRAS_API_KEY,
-  baseURL: "https://api.cerebras.ai/v1",
+  apiKey: process.env.GEMINI_API_KEY,
+  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
 });
 
 /** Fetches train service alerts from LTA DataMall. */
@@ -52,7 +52,7 @@ async function fetchTrainAlerts() {
 
       // If parsedData is null, we had a cache miss
       if (!parsedData) {
-        const model = "gpt-oss-120b";
+        const model = "gemini-3.5-flash-lite";
         console.log(`Cache miss! Processing with ${model}...`);
 
         const aiInput = `Raw Message: "${rawText}"\nAffected Segments: ${segmentsContext}`;
@@ -64,9 +64,7 @@ async function fetchTrainAlerts() {
               { role: "system", content: getSystemPrompt() },
               { role: "user", content: aiInput }
             ],
-            max_completion_tokens: 5000,
             response_format: { type: "json_object" },
-            // temperature: 0.1,
           });
 
           // Parse the JSON string immediately into a JS Object
